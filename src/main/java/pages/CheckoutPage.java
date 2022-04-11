@@ -1,5 +1,6 @@
 package pages;
 
+import com.sun.source.tree.BreakTree;
 import drivers.DriverSingleton;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -45,6 +46,9 @@ public class CheckoutPage {
     @FindBy(css = "#center_column > div > p > strong")
     private WebElement orderConfirmationMessage; /*use to check if the text is as it should*/
 
+    @FindBy(id = "summary_products_quantity")
+    private  WebElement summaryProducts;
+
 //    define methods
     private Boolean checkTitle (String title){
         return pageTitle.getText().equals(title);
@@ -82,6 +86,9 @@ public class CheckoutPage {
         WebDriverWait wait = new WebDriverWait(driver, 15);
         wait.until(ExpectedConditions.elementToBeClickable(orderConfirmationMessage));
         return orderConfirmationMessage.getText().contains(Constants.COMPLETE_ORDER);
+    }
+    public String getSummaryProductToString(){
+        return summaryProducts.getText();
     }
 
 }

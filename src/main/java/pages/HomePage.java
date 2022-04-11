@@ -10,6 +10,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.Constants;
+import utils.Utils;
 
 public class HomePage {
 //    we have the constructor
@@ -42,8 +43,30 @@ public class HomePage {
     @FindBy(css ="#homefeatured > li:nth-child(2)" )
     private  WebElement secondElement;
 
+    @FindBy(css = "#header > div.nav > div > div > nav > div.header_user_info > a")
+    private WebElement signInButton;
 
-//    define the actions/methods that we can do
+    @FindBy(css = "#header > div.nav > div > div > nav > div:nth-child(1) > a > span")
+    private WebElement username;
+
+    @FindBy(id = "search_query_top")
+    private WebElement searchBar;
+
+    @FindBy(css = "#searchbox > button")
+    private WebElement searchButton;
+
+    @FindBy(css = "#center_column > ul > li > div > div.left-block > div > a.product_img_link > img")
+    private WebElement searchResults;
+
+
+
+    //    define the actions/methods that we can do
+    public void clickSignIn(){
+        WebDriverWait wait = new WebDriverWait(driver, Constants.TIMEOUT);
+        wait.until(ExpectedConditions.elementToBeClickable(signInButton));
+        signInButton.click();
+    }
+
     public void addFirstElementToCart(){
         Actions hover = new Actions(driver);
         hover.moveToElement(firstElement).build().perform();
@@ -55,8 +78,10 @@ public class HomePage {
 //        confirm the validation that the cart contains one element
         if (cart.getText().contains(Constants.CART_QUANTITY))
             System.out.println("Cart has been updated");
-        else
+        else {
             System.out.println("Cart has not been updated");
+            Utils.takeScreenshot();
+        }
     }
 
     public void addSecondElementToCart(){
@@ -66,6 +91,21 @@ public class HomePage {
         WebDriverWait wait = new WebDriverWait(driver, Constants.TIMEOUT);
         wait.until(ExpectedConditions.elementToBeClickable(proceedToCheckoutButton));
         proceedToCheckoutButton.click();
+    }
+    public String getUsername(){
+        return username.getText();
+    }
+
+    public Boolean seachElement(String searchStr) {
+        searchBar.sendKeys(searchStr);
+        searchButton.click();
+        try {
+            if (searchResults.isEnabled())
+                return true;
+        } catch (Exception e) {
+            return false;
+        }
+        return false;
     }
 
 
